@@ -1,14 +1,15 @@
+import json
+import re
 import requests
 from bs4 import BeautifulSoup
+from settings import TEXT_BASE_URL_TO_SCRAPE, TEXT_DATA_URL_TO_SCRAPE
 
 
-def domain_scraper(domain):
-    url = f'http://{domain}'
+def domain_scraper(url):
     response = requests.get(url)
 
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    # Define the HTML tags to extract
     tags = ['p', 'a', 'li', 'h1', 'h2', 'h3']
 
     text = []
@@ -20,6 +21,23 @@ def domain_scraper(domain):
     return ' '.join(text)
 
 
-# Replace 'yourdomain.com' with your actual domain
-text = domain_scraper('yourdomain.com')
-print(text)
+def get_subpages(url):
+    response = requests.get(url)
+
+    json_pattern = r'\[\{(.*?)\}\]'
+    match = re.search(json_pattern, response.text)
+
+    if match:
+        extracted_string = match.group(0)
+        sub_pages = json.loads(extracted_string)
+
+        for sub_page in sub_pages:
+            link_suffix = sub_page['url']
+            link = f"{TEXT_BASE_URL_TO_SCRAPE}{link_suffix}"
+            print(link)
+            print(domain_scraper(link))
+    else:
+        print("No match found.")
+
+
+get_subpages(TEXT_DATA_URL_TO_SCRAPE)

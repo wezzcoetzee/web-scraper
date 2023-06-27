@@ -2,7 +2,7 @@ import json
 import re
 import requests
 from bs4 import BeautifulSoup
-from settings import TEXT_BASE_URL_TO_SCRAPE, TEXT_DATA_URL_TO_SCRAPE
+from settings import TEXT_BASE_URL_TO_SCRAPE, TEXT_DATA_URL_TO_SCRAPE, CONTENT_TEXT_DATA_URL_TO_SCRAPE
 
 
 def domain_scraper(url):
@@ -32,12 +32,16 @@ def get_subpages(url):
         sub_pages = json.loads(extracted_string)
 
         for sub_page in sub_pages:
-            link_suffix = sub_page['url']
-            link = f"{TEXT_BASE_URL_TO_SCRAPE}{link_suffix}"
-            print(link)
-            print(domain_scraper(link))
+            try:
+                link_suffix = sub_page['url']
+                link = f"{TEXT_BASE_URL_TO_SCRAPE}{link_suffix}"
+                print(link)
+                print(domain_scraper(link))
+            except AttributeError:
+                print("Not a valid subpage, skipping")
     else:
         print("No match found.")
 
 
 get_subpages(TEXT_DATA_URL_TO_SCRAPE)
+get_subpages(CONTENT_TEXT_DATA_URL_TO_SCRAPE)

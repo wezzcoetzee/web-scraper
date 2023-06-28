@@ -2,12 +2,12 @@ import json
 import re
 import requests
 from bs4 import BeautifulSoup
-from settings import TEXT_BASE_URL_TO_SCRAPE, TEXT_DATA_URL_TO_SCRAPE, CONTENT_TEXT_DATA_URL_TO_SCRAPE
+from settings import BASE_URL, HEADER_SLUGS, CONTENT_SLUGS
 from models import UrlModel
 
 
-urls_to_scrape = [UrlModel(TEXT_DATA_URL_TO_SCRAPE, "Headers.txt"),
-                  UrlModel(CONTENT_TEXT_DATA_URL_TO_SCRAPE, "Content.txt")]
+urls_to_scrape = [UrlModel(HEADER_SLUGS, "Headers.txt"),
+                  UrlModel(CONTENT_SLUGS, "Content.txt")]
 
 
 def domain_scraper(url):
@@ -39,7 +39,7 @@ def get_subpages(url, file_name):
         for sub_page in sub_pages:
             try:
                 link_suffix = sub_page['url']
-                link = f"{TEXT_BASE_URL_TO_SCRAPE}{link_suffix}"
+                link = f"{BASE_URL}{link_suffix}"
                 print(link)
                 write_output(link, file_name)
             except KeyError:

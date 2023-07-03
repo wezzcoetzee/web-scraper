@@ -6,8 +6,8 @@ from settings import BASE_URL, HEADER_SLUGS, CONTENT_SLUGS
 from models import UrlModel
 
 
-urls_to_scrape = [UrlModel(HEADER_SLUGS, "Headers.txt"),
-                  UrlModel(CONTENT_SLUGS, "Content.txt")]
+urls_to_scrape = [UrlModel(HEADER_SLUGS, "Header"),
+                UrlModel(CONTENT_SLUGS, "Content")]
 
 
 def domain_scraper(url):
@@ -23,10 +23,10 @@ def domain_scraper(url):
         for element in elements:
             text.append(element.get_text())
 
-    return ' '.join(text)
+    return ' \n '.join(text)
 
 
-def get_subpages(url, file_name):
+def get_subpages(url, type):
     response = requests.get(url)
 
     json_pattern = r'\[\{(.*?)\}\]'
@@ -40,6 +40,7 @@ def get_subpages(url, file_name):
             try:
                 link_suffix = sub_page['url']
                 link = f"{BASE_URL}{link_suffix}"
+                file_name = f"{type} - {sub_page['name']}.txt"
                 print(link)
                 write_output(link, file_name)
             except KeyError:
@@ -58,4 +59,4 @@ def write_output(link, file_name):
 
 
 for url_to_scrape in urls_to_scrape:
-    get_subpages(url_to_scrape.url, url_to_scrape.filename)
+    get_subpages(url_to_scrape.url, url_to_scrape.type)

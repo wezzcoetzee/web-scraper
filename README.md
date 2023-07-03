@@ -1,6 +1,7 @@
 # Python Web Scraper
 
 This is a simple web scraper to download text from a website. The content will be written to two text files in the `output` folder.
+
 - Content.txt
 - Headers.txt
 
@@ -23,7 +24,8 @@ I use [PyCharm](https://www.jetbrains.com/pycharm/) as my IDE. Really nice UI, s
 ### TL;DR
 
 - Download and install [Python3](https://www.python.org/downloads/)
-- Install `requirements.txt` - `pip3 install -r requirements.txt`
+- Install required packages using - `pip3 install -r requirements.txt`
+- Make sure you have a folder called `output` at the same level as `main.py`
 - Run the command - `python3 main.py`
 
 ### Installation Guides
